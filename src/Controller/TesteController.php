@@ -30,4 +30,12 @@ class TesteController extends AbstractController
 
         return $this->render('teste/index.html.twig', $data);
     }
+
+    #[Route('/teste/detalhe/{id}', name: 'detalhe')]
+    public function detalhes($id) : Response
+    {
+        $data['titulo'] = 'Pagina de detalhes';
+        $data['id'] = $id;
+        return $this->render('teste/detalhes.html.twig', $data);
+    }
 }

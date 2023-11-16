@@ -44,4 +44,24 @@ class CategoriaController extends AbstractController
 
         return $this->renderForm('categoria/form.html.twig', $data);
     }
+
+    #[Route("/categoria/editar/{id}", name: "categoria_editar")]
+    public function editar($id, Request $request, EntityManagerInterface $em, CategoriaRepository $categoriaRepository) : Response 
+    {
+        $msg = "";
+        $categoria= $categoriaRepository->find($id); //Retorna a categoria pelo $id
+        $form = $this->createForm(CategoriaType::class, $categoria);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()){
+            $em->flush(); //Faz o UPDATE da categoria no DB
+            $msg = 'Produto atualizado com sucesso!';
+        }
+
+        $data['titulo'] = 'Editar categoria';
+        $data['form'] = $form;
+        $data['msg'] = $msg;
+
+        return $this->renderForm('categoria/form.html.twig', $data);
+    }
 }

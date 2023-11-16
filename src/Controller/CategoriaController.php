@@ -49,7 +49,7 @@ class CategoriaController extends AbstractController
     public function editar($id, Request $request, EntityManagerInterface $em, CategoriaRepository $categoriaRepository) : Response 
     {
         $msg = "";
-        $categoria= $categoriaRepository->find($id); //Retorna a categoria pelo $id
+        $categoria = $categoriaRepository->find($id); //Retorna a categoria pelo $id
         $form = $this->createForm(CategoriaType::class, $categoria);
         $form->handleRequest($request);
 
@@ -63,5 +63,16 @@ class CategoriaController extends AbstractController
         $data['msg'] = $msg;
 
         return $this->renderForm('categoria/form.html.twig', $data);
+    }
+
+    #[Route("/categoria/excluir/{id}", name: "categoria_excluir")]
+    public function excluir($id, EntityManagerInterface $em, CategoriaRepository $categoriaRepository ) : Response 
+    {
+        $categoria = $categoriaRepository->find($id); //Retorna a categoria a nível de memoria
+
+        $em->remove($categoria); // Excluir a categoria do DB
+        $em->flush(); // Efetivamente excluir do DB
+
+        return $this->redirectToRoute('categoria_index');
     }
 }

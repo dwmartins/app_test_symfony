@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Symfony\Component\Validator\Constraints as Assert;
 use App\Repository\ProdutoRepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -14,9 +15,18 @@ class Produto
     private ?int $id = null;
 
     #[ORM\Column(length: 50)]
+    #[Assert\NotBlank]
+    #[Assert\Length(
+        min: 3,
+        max: 50,
+        minMessage: 'O campo nome do Produto deve conter mais de {{ limit }} caracteres.',
+        maxMessage: 'O campo nome do Produto deve conter no máximo {{ limit }} caracteres',
+    )]
     private ?string $nomeproduto = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank]
+    #[Assert\Positive(message: "O campo Valor deve conter um número positivo.")]
     private ?float $valor = null;
 
     #[ORM\ManyToOne(inversedBy: 'produtos')]
